@@ -7,6 +7,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -27,12 +30,13 @@ public class VerifyLogin {
 	
  @Test(description="Verify status code for GET method-users/2 as 200")
  public static void verifyStatusCodeGET() {
-	 //String token = gettoken();
 	 Response resp=given().when().get("https://reqres.in/api/users");
 	 System.out.println(resp.path("total").toString());
 	 assertEquals(resp.getStatusCode(),200);
-	 assertEquals(resp.path("total").toString(),"12");
 	 
+	 assertEquals(resp.path("total").toString(),"12");
+	
+	 List<String> expected = new ArrayList<String>();
 	 List<String> jsonResponse = resp.jsonPath().getList("data");
      System.out.println(jsonResponse.size());
      System.out.println("The number of data in the list is : " + jsonResponse.size());
@@ -46,7 +50,9 @@ public class VerifyLogin {
    //  List<Map<String, String>> companies = resp.jsonPath().getList("data");
    //  System.out.println(companies.get(0).get("first_name"));
     List<String> ids = resp.jsonPath().getList("data.first_name");
-
+    Collections.sort(jsonResponse);
+    Collections.sort(expected);
+    assertEquals(jsonResponse,expected);
      for(String i:ids)
      {
     	// System.out.println(i);
